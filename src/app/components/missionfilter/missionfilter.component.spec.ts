@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MissionfilterComponent } from './missionfilter.component';
 
 describe('MissionfilterComponent', () => {
@@ -9,8 +8,7 @@ describe('MissionfilterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MissionfilterComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MissionfilterComponent);
     component = fixture.componentInstance;

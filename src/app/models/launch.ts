@@ -1,17 +1,17 @@
+// src/app/models/launch.ts
 export interface Launch {
-    flight_number: number;
-    mission_name: string;
-    launch_year: string;
-    details: string | null;
-    rocket: {
-      rocket_name: string;
-      rocket_type: string;
+  flight_number: number;
+  name: string; // Changed from mission_name to name (API v4 uses "name")
+  date_utc: string; // Use date_utc to extract the launch year
+  details: string | null;
+  rocket: string; // In v4, rocket is an ID; we'll fetch the rocket name separately if needed
+  links: {
+    patch: {
+      small: string | null;
     };
-    links: {
-      mission_patch_small: string | null;
-      article_link: string | null;
-      wikipedia: string | null;
-      video_link: string | null;
-    };
-    id: string;
-  }
+    article: string | null;
+    wikipedia: string | null;
+    youtube_id: string | null;
+  };
+  id: string;
+}

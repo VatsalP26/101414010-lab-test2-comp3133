@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MissionlistComponent } from './missionlist.component';
 
 describe('MissionlistComponent', () => {
@@ -9,8 +8,7 @@ describe('MissionlistComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MissionlistComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MissionlistComponent);
     component = fixture.componentInstance;

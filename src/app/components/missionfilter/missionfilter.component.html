@@ -1,5 +1,8 @@
-<!-- src/app/components/missionfilter/missionfilter.component.html -->
-<mat-form-field appearance="fill">
+<div class="filter-container">
+  <mat-form-field appearance="fill">
     <mat-label>Filter by Launch Year</mat-label>
-    <input matInput placeholder="e.g., 2020" (input)="onFilterChange($event)">
+    <input matInput placeholder="e.g., 2020" [(ngModel)]="year">
   </mat-form-field>
+  <button mat-raised-button color="primary" (click)="applyFilter()">Apply</button>
+  <button mat-raised-button color="warn" (click)="clearFilter()">Clear</button>
+</div>
