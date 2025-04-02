@@ -4,6 +4,7 @@ import { SpacexService } from '../../services/spacex.service';
 import { Launch } from '../../models/launch';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,12 +13,13 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
+    MatIconModule
   ],
   templateUrl: './missiondetails.component.html',
   styleUrls: ['./missiondetails.component.css']
 })
-export class MissiondetailsComponent implements OnInit {
+export class MissionDetailsComponent implements OnInit {
   launch: Launch | null = null;
 
   constructor(

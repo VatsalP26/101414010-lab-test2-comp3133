@@ -1,4 +1,44 @@
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Remove SCSS imports and variables */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+  }
+  
+  a {
+    color: #00ACC1; /* Cyan */
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Define basic theme colors */
+  :root {
+    --primary: #00ACC1; /* Cyan */
+    --accent: #FF9800; /* Orange */
+    --warn: #F44336; /* Red */
+    --background: #f0f4f8;
+    --card-background: #ffffff;
+    --text-primary: #212121;
+    --text-secondary: #757575;
+  }
+  
+  /* Apply theme to Angular Material components */
+  .mat-toolbar {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .mat-button.mat-primary,
+  .mat-raised-button.mat-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .mat-button.mat-warn,
+  .mat-raised-button.mat-warn {
+    background-color: var(--warn);
+    color: white;
+  }

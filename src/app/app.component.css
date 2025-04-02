@@ -1,15 +1,8 @@
-/* src/app/app.component.css */
-.app-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 mat-toolbar {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-mat-toolbar span {
-  font-size: 1.5rem;
-  font-weight: 500;
+main {
+  display: block;
+  min-height: calc(100vh - 64px);
 }

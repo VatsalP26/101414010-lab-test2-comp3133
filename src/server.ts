@@ -1,66 +1,91 @@
-import {
-  AngularNodeAppEngine,
-  createNodeRequestHandler,
-  isMainModule,
-  writeResponseToNodeResponse,
-} from '@angular/ssr/node';
 import express from 'express';
-import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { dirname, join, resolve } from 'node:path';
+import { renderApplication } from '@angular/platform-server';
+import { bootstrapApplication } from '@angular/platform-browser'; 
+import { AppComponent } from './app/app.component';
+import { config } from './app/app.config.server';
+import { readFileSync } from 'fs';
 
-const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-const browserDistFolder = resolve(serverDistFolder, '../browser');
+const FALLBACK_HTML = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>101414010 Lab Test 2 - COMP3133</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>
+`;
 
-const app = express();
-const angularApp = new AngularNodeAppEngine();
+export function app(): express.Express {
+  const server = express();
+  const serverDistFolder = dirname(fileURLToPath(import.meta.url));
+  const browserDistFolder = resolve(serverDistFolder, '../browser');
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+  const isProduction = process.env['NODE_ENV'] === 'production';
+  let indexHtml: string;
+  try {
+    const indexHtmlPath = isProduction
+      ? join(browserDistFolder, 'index.html')
+      : join(process.cwd(), 'src', 'index.html');
+    indexHtml = readFileSync(indexHtmlPath, 'utf-8');
+    console.log('Loaded index.html:', indexHtml); 
+  } catch (error) {
+    console.error('Failed to load index.html, using fallback:', error);
+    indexHtml = FALLBACK_HTML;
+  }
 
-/**
- * Serve static files from /browser
- */
-app.use(
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: false,
-    redirect: false,
-  }),
-);
+  if (!indexHtml.includes('<app-root>')) {
+    console.error('index.html does not contain <app-root>. Using fallback HTML.');
+    indexHtml = FALLBACK_HTML;
+  }
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
-app.use('/**', (req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
-});
+  server.set('view engine', 'html');
+  server.set('views', browserDistFolder);
 
-/**
- * Start the server if this module is the main entry point.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
- */
-if (isMainModule(import.meta.url)) {
+  server.get(
+    '**/*.*',
+    express.static(isProduction ? browserDistFolder : join(process.cwd(), 'src'), {
+      maxAge: '1y',
+      index: false,
+    }),
+  );
+
+  server.get('**', async (req, res) => {
+    try {
+      const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+      console.log('Rendering URL:', url);
+      const bootstrap = () => bootstrapApplication(AppComponent, config);
+      const html: string = await renderApplication(bootstrap, {
+        url,
+        document: indexHtml
+      });
+      console.log('Rendered HTML:', html); 
+      res.send(html);
+    } catch (err: unknown) {
+      console.error('SSR Error:', err); 
+      res.status(500).send((err as Error).message || 'Internal Server Error');
+    }
+  });
+
+  return server;
+}
+
+function run(): void {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
+
+  const server = app();
+  server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
-export const reqHandler = createNodeRequestHandler(app);
+run();
+
+export default app;

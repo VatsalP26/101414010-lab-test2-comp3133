@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "outDir": "./dist/out-tsc/server",
+      "target": "es2019",
+      "module": "esnext",
+      "moduleResolution": "node",
+      "types": [
+        "node"
+      ]
+    },
+    "files": [
+      "src/main.server.ts",
+      "src/server.ts"
+    ]
+  }

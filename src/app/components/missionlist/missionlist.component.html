@@ -1,23 +1,15 @@
-<app-missionfilter (filterYear)="filterByYear($event)"></app-missionfilter>
+<app-missionfilter (filterChange)="applyFilters($event)"></app-missionfilter>
 <div class="mission-list">
-  <mat-grid-list cols="3" rowHeight="400px" gutterSize="20px">
+  <mat-grid-list cols="2" rowHeight="400px" gutterSize="20px">
     <mat-grid-tile *ngFor="let launch of filteredLaunches">
       <mat-card class="mission-card" [routerLink]="['/mission', launch.id]">
         <mat-card-header>
-          <mat-card-title>{{ launch.name }}</mat-card-title>
+          <img mat-card-image [src]="launch.links.patch.small" alt="Mission Patch" *ngIf="launch.links.patch.small">
           <mat-card-subtitle>Flight #{{ launch.flight_number }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <p><strong>Launch Year:</strong> {{ getLaunchYear(launch) }}</p>
+          <mat-card-title>{{ launch.name }}</mat-card-title>
           <p><strong>Details:</strong> {{ launch.details || 'No details available' }}</p>
-          <p><strong>Rocket:</strong> (Rocket ID: {{ launch.rocket }})</p>
-          <p><strong>Links:</strong></p>
-          <mat-list>
-            <mat-list-item><a [href]="launch.links.patch.small" target="_blank">Patch</a></mat-list-item>
-            <mat-list-item><a [href]="launch.links.article" target="_blank">Article</a></mat-list-item>
-            <mat-list-item><a [href]="launch.links.wikipedia" target="_blank">Wikipedia</a></mat-list-item>
-            <mat-list-item><a [href]="'https://www.youtube.com/watch?v=' + launch.links.youtube_id" target="_blank">Video</a></mat-list-item>
-          </mat-list>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

@@ -1,19 +1,30 @@
 <div class="mission-details" *ngIf="launch">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>{{ launch.name }}</mat-card-title> <!-- Display mission name -->
+      <img mat-card-image [src]="launch.links.patch.small" alt="Mission Patch" *ngIf="launch.links.patch.small">
+      <mat-card-title>{{ launch.name }}</mat-card-title>
       <mat-card-subtitle>Flight #{{ launch.flight_number }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <p><strong>Launch Year:</strong> {{ launch.date_utc | date:'yyyy' }}</p> <!-- Extract year from date_utc -->
+      <p><strong>Launch Year:</strong> {{ launch.date_utc | date:'yyyy' }}</p>
+      <p><strong>Launch Status:</strong> {{ launch.success ? 'Successful' : 'Failed' }}</p>
+      <p><strong>Landing Status:</strong> {{ (launch.cores && launch.cores[0] && launch.cores[0].landing_success !== null) ? (launch.cores[0].landing_success ? 'Successful' : 'Failed') : 'Unknown' }}</p>
       <p><strong>Details:</strong> {{ launch.details || 'No details available' }}</p>
-      <p><strong>Rocket:</strong> (Rocket ID: {{ launch.rocket }})</p> <!-- Placeholder for rocket -->
+      <p><strong>Rocket:</strong> (Rocket ID: {{ launch.rocket }})</p>
       <p><strong>Links:</strong></p>
       <mat-list>
-        <mat-list-item><a [href]="launch.links.patch.small" target="_blank">Patch</a></mat-list-item>
-        <mat-list-item><a [href]="launch.links.article" target="_blank">Article</a></mat-list-item>
-        <mat-list-item><a [href]="launch.links.wikipedia" target="_blank">Wikipedia</a></mat-list-item>
-        <mat-list-item><a [href]="'https://www.youtube.com/watch?v=' + launch.links.youtube_id" target="_blank">Video</a></mat-list-item>
+        <mat-list-item>
+          <a [href]="launch.links.patch.small" target="_blank">Patch</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a [href]="launch.links.article" target="_blank">Article</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a [href]="launch.links.wikipedia" target="_blank">Wikipedia</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a [href]="'https://www.youtube.com/watch?v=' + launch.links.youtube_id" target="_blank">Video</a>
+        </mat-list-item>
       </mat-list>
     </mat-card-content>
   </mat-card>
